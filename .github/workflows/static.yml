@@ -1,0 +1,55 @@
+# Simple workflow for deploying static content to GitHub Pages
+- name: Localize AI
+  # You may pin to the exact commit or the version.
+  # uses: voloshinskii/localize-ai@2b7d4950410f486f4444654fe443624fb20d5375
+  uses: voloshinskii/localize-ai@v1.0.2
+  with:
+    # Openai API token
+    openai-token: 
+    # Path to locales folder
+    locales-path: # optional, default is ./locales
+    # Main locale
+    main-locale: # optional, default is en
+    # GPT model
+    model: # optional, default is gpt-4
+          
+        on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
